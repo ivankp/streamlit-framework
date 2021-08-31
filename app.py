@@ -77,27 +77,28 @@ def main():
             st.text(f'Error: failed to process request')
         return
 
-    p = figure(
-        x_axis_type='datetime',
-        tools='pan,wheel_zoom,box_zoom,reset,save',
-        plot_width=1000,
-        title = symb)
-    p.xaxis.major_label_orientation = pi/4
-    p.grid.grid_line_alpha = 0.3
+    with st.container():
+        p = figure(
+            x_axis_type='datetime',
+            tools='pan,wheel_zoom,box_zoom,reset,save',
+            # plot_width=1000,
+            title = symb)
+        p.xaxis.major_label_orientation = pi/4
+        p.grid.grid_line_alpha = 0.3
 
-    inc = df.close > df.open
-    dec = df.open > df.close
-    n,u = re.match(r'(\d+)(.+)',dt).groups()
-    w = int(n)*units[u]*0.75
+        inc = df.close > df.open
+        dec = df.open > df.close
+        n,u = re.match(r'(\d+)(.+)',dt).groups()
+        w = int(n)*units[u]*0.75
 
-    p.segment(df.timestamp, df.high, df.timestamp, df.low, color='black')
-    p.vbar(df.timestamp[inc], w, df.open[inc], df.close[inc],
-        fill_color="#007532", line_color=None)
-    p.vbar(df.timestamp[dec], w, df.open[dec], df.close[dec],
-        fill_color="#CE2A1D", line_color=None)
+        p.segment(df.timestamp, df.high, df.timestamp, df.low, color='black')
+        p.vbar(df.timestamp[inc], w, df.open[inc], df.close[inc],
+            fill_color="#007532", line_color=None)
+        p.vbar(df.timestamp[dec], w, df.open[dec], df.close[dec],
+            fill_color="#CE2A1D", line_color=None)
 
-    st.bokeh_chart(p, use_container_width=True)
-    # show(p)
+        st.bokeh_chart(p, use_container_width=True)
+        # show(p)
 
 if __name__ == "__main__":
     main()
